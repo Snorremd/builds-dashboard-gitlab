@@ -1,8 +1,10 @@
 module Builds.Commands exposing (..)
 
 import Http
-import Json.Decode as Decode exposing ((:=))
+import Json.Decode as Decode exposing (..)
 import Task
+import Date
+
 import Builds.Models exposing (Build, Commit)
 import Builds.Messages exposing (..)
 
@@ -22,13 +24,19 @@ collectionDecoder =
 
 buildDecoder : Decode.Decoder Build
 buildDecoder =
-  Decode.object6 Build
+  Decode.object7 Build
     ("id" := Decode.int)
     ("name" := Decode.string)
     ("stage" := Decode.string)
     ("ref" := Decode.string)
     ("status" := Decode.string)
+    (Decode.maybe ("finished_at" := jsonDateToDate))
     ("commit" :=  commitDecoder)
+
+jsonDateToDate : Decoder Date.Date
+jsonDateToDate =
+  Decode.customDecoder Decode.string Date.fromString
+
 
 commitDecoder : Decode.Decoder Commit
 commitDecoder =

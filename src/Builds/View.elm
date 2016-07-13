@@ -7,17 +7,37 @@ import Builds.Models exposing (Build)
 
 view : List Build -> Html Msg
 view builds =
-    div [] (List.map viewBuild builds)
+    table [ class "table" ]
+          [ thead []
+                  [ tr []
+                       [ th [] [ text "Status" ]
+                       , th [] [ text "Commit" ]
+                       , th [] [ text "Ref" ]
+                       , th [] [ text "Name" ]
+                       , th [] [ text "Finished" ]
+                       , th [] [ text "Commit title" ]]]
+          , tbody []
+                  (List.map viewBuild builds) ]
+
 
 viewBuild : Build -> Html Msg
 viewBuild build =
-  div [ class "card card-inverse card-success text-xs" ]
-      [ div [ class "card-block" ]
-            [ h4 [ class "card-title" ]
-                 [ text (build.ref ++ " " ++ build.name ++ " - " ++ build.commit.title)]
-            , p  [ class "card-text"]
-                 [ text (build.commit.message)]
-            , p  [ class "card-text"]
-                 [ small [ ]
-                         [ text ("Started " ++ build.commit.shortId)]]]]
+  tr [class ("alert " ++ alertClass build.status)]
+     [ td [] [ text build.status ]
+     , td [] [ text build.commit.shortId ]
+     , td [] [ text build.ref ]
+     , td [] [ text build.name ]
+     , td [] [ text (case build.finishedAt of -- TODO: Write date handling!
+                       Nothing -> ""
+                       Just val -> toString val) ]
+     , td [] [ text build.commit.title ]]
+
   
+alertClass : String -> String
+alertClass status =
+  case status of
+    "success" -> "alert-success"
+    "failed" -> "alert-danger"
+    "canceled" -> "alert-canceled"
+    "pending" -> "alert-warning"
+    _ -> "alert-info"
