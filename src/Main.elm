@@ -6,12 +6,11 @@ import Models exposing (Model, initialModel)
 import View exposing (view)
 import Update exposing (update)
 import Subscriptions exposing (subscriptions)
-import Builds.Commands exposing (fetchAll)
 
 init : ( Model, Cmd Msg )
 init =
   (initialModel
-  , Cmd.map Messages.BuildsMsg (fetchAll initialModel.gitlabUrl initialModel.projectId initialModel.gitlabToken))
+  , Cmd.none)
 
 -- MAIN
 main : Program Never

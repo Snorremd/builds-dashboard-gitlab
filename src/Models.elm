@@ -2,17 +2,18 @@
 module Models exposing (..)
 
 import Builds.Models exposing (Build)
+import Settings.Models exposing (Settings)
 
 type alias Model =
-  { gitlabUrl : String
-  , gitlabToken : String
-  , projectId : String
+  { settingsVisible : Bool
+  , settings : Settings
   , builds : List Build }
 
 initialModel : Model
 initialModel =
-    { gitlabUrl = "https://gitlab.example"
-    , gitlabToken = "yourtoken"
-    , projectId =  "1"
+    { settingsVisible = True
+    , settings = { gitlabUrl = ""
+                 , gitlabToken = "yourtoken"
+                 , projectId =  "1"}
     , builds = []
     }
