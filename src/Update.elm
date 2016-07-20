@@ -1,5 +1,6 @@
 module Update exposing (..)
 
+import Navigation
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 import Builds.Update
@@ -11,10 +12,12 @@ update msg model =
     case msg of
         Tick time ->
             (model, Cmd.map Messages.BuildsMsg (fetchAll model.settings.gitlabUrl model.settings.projectId model.settings.gitlabToken))
-        ToggleSettings ->
-            ( { model | settingsVisible = not model.settingsVisible }, Cmd.none )
         RefreshBuilds ->
             (model, Cmd.map Messages.BuildsMsg (fetchAll model.settings.gitlabUrl model.settings.projectId model.settings.gitlabToken))
+        ShowBuilds ->
+            ( model, Navigation.modifyUrl "#builds")
+        ShowSettings ->
+            ( model, Navigation.modifyUrl "#settings")
         BuildsMsg subMsg ->
             let
                 ( updatedBuilds, cmd ) =
